@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8"  />
+    <title>Title</title>
+    <style>
+        #root {
+            display: flex;
+            flex-direction: column;
+        }
+        #root * {
+            margin: 0 auto;
+        }
+    </style>
+    <script src="//cdn.bootcss.com/angular.js/1.5.6/angular.min.js"></script>
+</head>
+<body >
+  <div ng-app="myApp" ng-controller="myCtrl" id="root">
+       <table style="background-color: #a0c6e5">
+               <tr>
+                   <td>表名</td> <td>操作</td>
+               </tr>
+               <tr ng-repeat ="table in tables" bgcolor="F4FAFF">
+                   <td><a href="/employees">{{table}} </a></td>
+                    <td><button ng-click="modify(table)">{{table}}</button></td>
+                   <td><input   ng-click="count = count + 1"  value="drop"  type="button" /></td>
+               </tr>
+       </table>
+      <p>{{tableSelect}}</p>
+      </div>
+  <script type="text/javascript">
+      var app = angular.module('myApp', []);
+      app.controller('myCtrl', function($scope) {
+          $scope.tables=["employees","logs","products","purchase","suppliers",
+              "userbypersonnel","user"];
+          $scope.tableSelect="table";
+          $scope.count = 0;
+          $scope.modify=function (name) {
+              $scope.tableSelect=name;
+          }
+      });
+  </script>
+</body>
+</html>

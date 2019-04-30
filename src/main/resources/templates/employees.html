@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title>Title</title>
+    <script src="//cdn.bootcss.com/angular.js/1.5.6/angular.min.js"></script>
+    <script type="text/javascript">
+        var  app=angular.module('app', []);
+        app.controller('MainController',function($rootScope, $scope, $http){
+            $scope.data={"eid":"","ename":"","city":""};
+            $scope.rows=[];
+            //add
+            $scope.add=function () {
+                $http({
+                    url : '/add',
+                    method : 'POST',
+                    data : $scope.data
+                }).success(function(r) {
+                    //保存成功后更新数据
+                 //  $scope.get(r.id);
+                 //   $scope.data.eid="succed"
+                });
+            }
+            //update
+            $scope.update=function(){
+                $http({
+                   url: '/update',
+                   method:'POST',
+                   data:$scope.data
+                }).success(function (r) {
+
+                });
+            }
+            //eid
+            $scope.eidt=function(row){
+                $scope.data.eid=row.eid;
+                $scope.data.ename=row.ename;
+                $scope.data.city=row.city;
+            }
+            //del
+            $scope.delete= function(eid) {
+                $http({
+                    url : '/delete?eid='+eid,
+                    method : 'GET'
+                  //  params: {eid}
+                }).success(function(r) {
+                    //删除成功后移除数据
+                    $scope.data.eid="杉树";
+                    $scope.remove(r.id);
+                });
+            }
+            //remove
+            $scope.remove=function(eid){
+                for (var i in $scope.rows){
+                    var row=rows[i];
+                    if (row.eid==eid){
+                        $scope.rows.splice(i, 1);
+                        return;
+                    }
+                }
+            }
+
+            //初始化数据
+            $http({
+                url :'/findAll',
+                method :'POST'
+            }).success(function (rows) {
+                for (var i in rows){
+                    var row=rows[i];
+                    $scope.rows.push(row)
+                }
+            })
+        });
+    </script>
+
+</head>
+
+<body>
+<div ng-app="app" ng-controller="MainController">
+  <table  style="text-align: center">
+    <tr  bgcolor='#F4FAFF' > 员工表</tr>
+    <tr>
+        <td>操作</td>
+        <td>eid</td>
+        <td>ename</td>
+        <td>city</td>
+    </tr>
+    <tr ng-repeat="row in rows" bgcolor='#F4FAFF'>
+        <td><input   ng-click="eidt(row)"       value="编辑" type="button" />
+            <input   ng-click="delete(row.eid)" value="删除" type="button" /></td>
+        <td>{{row.eid}}</td>
+        <td>{{row.ename}}</td>
+        <td>{{row.city}}</td>
+    </tr>
+  </table>
+
+<h1>编辑信息：</h1>
+<input eid="eid" type="hidden" ng-model="data.eid" />
+<table cellspacing="1" style="background-color: #a0c6e5">
+    <tr>
+        <td>编号：</td>
+        <td><input type="text" ng-model="data.eid" /></td>
+        <td>name：</td>
+        <td><input type="text" ng-model="data.ename" /></td>
+        <td>城市：</td>
+        <td><input type="text" ng-model="data.city" /></td>
+    </tr>
+</table>
+<button ng-click = "update()">modify</button>
+<button ng-click = "add()" >Add</button>
+    <p>{{data.eid}} {{data.ename}} {{data.city}}</p>
+</div>
+</body>
+</html>
