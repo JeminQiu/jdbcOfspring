@@ -3,10 +3,10 @@ package JDBC.Dao;
 import java.util.List;
 
 public interface employeesDao {
-      boolean add(employee emp);
+      boolean add(All all);
       List<employee> findAll();
-      boolean delete(employee employee);
-      boolean update(employee employee);
+      boolean delete(All all);
+      boolean update(All all);
       employee get(String eid);
       employee getByname(String name);
 

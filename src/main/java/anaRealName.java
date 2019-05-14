@@ -16,11 +16,11 @@ public class anaRealName  {
     public anaRealName(){
 
         url=new String();
-         url="https://dlglobal.qq.com/weixin/Windows/WeChat_C1018.exe";
-        file=new File("断点续传.exe");
+         url="ftp://ftp.inrialpes.fr/pub/lear/douze/data/INRIAPerson.tar";
+        file=new File("断点续传.tar");
         position=file.length();
         doal();
-        con(file,url,position);
+       // con(file,url,position);
     }
     public void getByname() {
         String name;
@@ -83,9 +83,9 @@ public class anaRealName  {
     }
     public void doal(){
         try{
-            URL url=new URL("https://www1.szu.edu.cn/szu.asp");
+            URL url=new URL("ftp://ftp.inrialpes.fr/pub/lear/douze/data/INRIAPerson.tar");
             InputStream in=url.openStream();
-            FileOutputStream fout=new FileOutputStream(new File("szu.html"));
+            FileOutputStream fout=new FileOutputStream(new File("szu.tar"));
             int a=0;
             while (a>-1){
                 a=in.read();

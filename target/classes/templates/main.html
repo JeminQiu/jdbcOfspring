@@ -21,8 +21,7 @@
                    <td>表名</td> <td>操作</td>
                </tr>
                <tr ng-repeat ="table in tables" bgcolor="F4FAFF">
-                   <td><a href="/employees">{{table}} </a></td>
-                    <td><button ng-click="modify(table)">{{table}}</button></td>
+                   <td><a href="/showTables"> <button ng-click="modify(table)">{{table}}</button> </a></td>
                    <td><input   ng-click="count = count + 1"  value="drop"  type="button" /></td>
                </tr>
        </table>
@@ -30,14 +29,20 @@
       </div>
   <script type="text/javascript">
       var app = angular.module('myApp', []);
-      app.controller('myCtrl', function($scope) {
-          $scope.tables=["employees","logs","products","purchase","suppliers",
-              "userbypersonnel","user"];
+      app.controller('myCtrl', function($scope,$http) {
+          $scope.tables=["employees","logs","products","purchases","suppliers","customers"]
           $scope.tableSelect="table";
           $scope.count = 0;
+          $scope.table="showTables";
           $scope.modify=function (name) {
               $scope.tableSelect=name;
+              $http({
+                  url : '/setTables?table='+name,
+                  method : 'GET'
+              }).success(function(r) {
+              });
           }
+
       });
   </script>
 </body>

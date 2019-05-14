@@ -14,9 +14,23 @@ public class xiaoXiaoLe implements xiaoxiaoleModel {
         arrayList = new ArrayList<>();
     }
     public void First(){
-        getInput();
-        initialMap(); //初始化矩阵
-        inspectInitialMap(map);//检查矩阵
+        M=8;
+        N=4;
+        map=new int[8][];
+        map[0]=new int[]{3 ,3 ,4, 3 };
+        map[1]=new int[]{3, 2, 3, 3 };
+        map[2]=new int[]{2, 4 ,3 ,4 };
+        map[3]=new int[]{1 ,3 ,4 ,3 };
+        map[4]=new int[]{3, 3, 1 ,1};
+        map[5]=new int[]{3 ,4 ,3 ,3 };
+        map[6]=new int[]{1, 4, 4 ,3 };
+        map[7]=new int[]{1, 2, 3 ,2};
+        mapTemp=new int[8][4];
+        mapStore=new int[8][4];
+
+        //getInput();
+        //initialMap(); //初始化矩阵
+       // inspectInitialMap(map);//检查矩阵
         exchangePoint=new exchangePoint(M,N);
         System.out.println("------初始矩阵---------");
         outMap(map);//输出初始矩阵

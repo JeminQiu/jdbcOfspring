@@ -19,8 +19,8 @@
             $scope.colName=[];
             $scope.rows=[];
             $scope.data={};
-            $scope.count=0;
-            $scope.col=[];
+            $scope.data2={};
+            $scope.rowSum=0;
             $scope.setCol=function(name){
                 $scope.currentCol=name;
             }
@@ -37,16 +37,6 @@
                 });
             }
             //update
-            $scope.update=function(){
-                $http({
-                    url: '/update',
-                    method:'POST',
-                    data:$scope.data
-                }).success(function (r) {
-
-                });
-            }
-            //update
             $scope.modify=function(rid){
                 $http({
                     url: '/update',
@@ -55,12 +45,6 @@
                 }).success(function (r) {
 
                 });
-            }
-            //eid
-            $scope.eidt=function(row){
-                $scope.data.eid=row.eid;
-                $scope.data.ename=row.ename;
-                $scope.data.city=row.city;
             }
             //del
             $scope.delete= function(eid) {
@@ -85,15 +69,6 @@
                     }
                 }
             }
-            $scope.xiuGai=function(name,names){
-                $scope.count=count+1;
-                $scope.data3[0].add({name:names});
-
-            }
-            $scope.cou=function(){
-                $scope.count=count+1;
-                $scope.currentCol="132";
-            }
             //获得列名
             $http({
                 url :'/findColumn',
@@ -102,7 +77,6 @@
                 for (var i in rows){
                     var row=rows[i];
                     $scope.sumCol++;
-                    $scope.col.push(row);
                     $scope.colName.push(row.name);
                 }
             })
@@ -115,6 +89,7 @@
                     var row=rows[i];
                     $scope.rows.push(row)
                     $scope.data=row;
+                    $scope.rowSum++;
                 }
             })
         });
@@ -125,49 +100,22 @@
 <body>
 <div ng-app="app" ng-controller="MainController"  >
     <table  style="text-align: center">
-        <tr  bgcolor='#F4FAFF' > 员工表  </tr>
-        <tr>
-            <td>操作</td>
-            <td  ng-repeat="names in col ">{{names.name}}</td>
-        </tr>
-        <tr ng-repeat="row in rows" bgcolor='#F4FAFF'>
-            <td><input   ng-click="eidt(row)"       value="编辑" type="button" />
-                <a href="/employees.html"> <input   ng-click="delete(row)" value="删除" type="button" /></a></td>
-            <td ng-repeat="name in row"  bgcolor='#F4FAFF'>{{name}} </td>
-        </tr>
-    </table>
-    <h1>编辑信息：</h1>
-    <input eid="eid" type="hidden" ng-model="data.eid" />
-    <table cellspacing="1" style="background-color: #a0c6e5">
-        <tr >
-            <td>编号：</td>
-            <td><input type="text" ng-model="data.eid" /></td>
-            <td>name：</td>
-            <td><input type="text" ng-model="data.ename" /></td>
-            <td>城市：</td>
-            <td><input type="text" ng-model="data.city" /></td>
-        </tr>
-    </table>
-    <a href="/employees.html"><button ng-click = "update()">modify</button> </a>
-    <a href="/employees.html"><button ng-click = "add()" >Add</button></a>
-
-    <table  style="text-align: center">
-        <tr  bgcolor='#F4FAFF' > 员工表  </tr>
+        <tr  bgcolor='#F4FAFF' >  </tr>
         <tr>
             <td>operation</td>
-            <td  ng-repeat="names in col ">{{names.name}}</td>
+            <td  ng-repeat="names in colName ">{{names}}</td>
         </tr>
         <tr ng-repeat="row in rows" bgcolor='#F4FAFF'>
-            <td><a href="/employees.html"><button ng-click = "modify(row)">modify</button> </a>
-                <a href="/employees.html"><button ng-click = "delete(row)" >delete</button></a>
+            <td><a href="/showTables.html"><button ng-click = "modify(row)">modify</button> </a>
+                <a href="/showTables.html"><button ng-click = "delete(row)" >delete</button></a>
             </td>
             <td ng-repeat="name in colName"  bgcolor='#F4FAFF'>
                 <input type="text"    ng-model="row[name]" /></td>
         </tr>
         <tr>
-            <td><a href="/employees.html"><button ng-click = "add(data)">Add</button> </a></td>
+            <td><a href="/showTables.html"><button ng-click = "add(data2)">Add</button> </a></td>
             <td ng-repeat="name in colName" bgcolor='#F4FAFF'>
-                <input type="text" ng-model="data[name]"/>
+                <input type="text" ng-model="data2[name]"/>
             </td>
         </tr>
     </table>

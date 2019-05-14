@@ -3,30 +3,55 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <title>Title</title>
+    <style>
+        #root {
+            display: flex;
+            flex-direction: column;
+        }
+        #root * {
+            margin: 0 auto;
+        }
+    </style>
     <script src="//cdn.bootcss.com/angular.js/1.5.6/angular.min.js"></script>
     <script type="text/javascript">
         var  app=angular.module('app', []);
         app.controller('MainController',function($rootScope, $scope, $http){
-            $scope.data={"eid":"","ename":"","city":""};
+            $scope.colName=[];
             $scope.rows=[];
+            $scope.data={};
+            $scope.count=0;
+            $scope.col=[];
+            $scope.setCol=function(name){
+                $scope.currentCol=name;
+            }
             //add
-            $scope.add=function () {
+            $scope.add=function (eid) {
                 $http({
                     url : '/add',
                     method : 'POST',
-                    data : $scope.data
+                    data : eid
                 }).success(function(r) {
                     //保存成功后更新数据
-                 //  $scope.get(r.id);
-                 //   $scope.data.eid="succed"
+                    //  $scope.get(r.id);
+                    //   $scope.data.eid="succed"
                 });
             }
             //update
             $scope.update=function(){
                 $http({
-                   url: '/update',
-                   method:'POST',
-                   data:$scope.data
+                    url: '/update',
+                    method:'POST',
+                    data:$scope.data
+                }).success(function (r) {
+
+                });
+            }
+            //update
+            $scope.modify=function(rid){
+                $http({
+                    url: '/update',
+                    method:'POST',
+                    data:rid
                 }).success(function (r) {
 
                 });
@@ -40,12 +65,13 @@
             //del
             $scope.delete= function(eid) {
                 $http({
-                    url : '/delete?eid='+eid,
-                    method : 'GET'
-                  //  params: {eid}
+                    url : '/delete',
+                    method : 'POST',
+                    data: eid
+                    //  params: {eid}
                 }).success(function(r) {
                     //删除成功后移除数据
-                    $scope.data.eid="杉树";
+                    $scope.data.eid="chanshu";
                     $scope.remove(r.id);
                 });
             }
@@ -59,7 +85,27 @@
                     }
                 }
             }
+            $scope.xiuGai=function(name,names){
+                $scope.count=count+1;
+                $scope.data3[0].add({name:names});
 
+            }
+            $scope.cou=function(){
+                $scope.count=count+1;
+                $scope.currentCol="132";
+            }
+            //获得列名
+            $http({
+                url :'/findColumn',
+                method :'POST'
+            }).success(function (rows) {
+                for (var i in rows){
+                    var row=rows[i];
+                    $scope.sumCol++;
+                    $scope.col.push(row);
+                    $scope.colName.push(row.name);
+                }
+            })
             //初始化数据
             $http({
                 url :'/findAll',
@@ -68,6 +114,7 @@
                 for (var i in rows){
                     var row=rows[i];
                     $scope.rows.push(row)
+                    $scope.data=row;
                 }
             })
         });
@@ -76,39 +123,54 @@
 </head>
 
 <body>
-<div ng-app="app" ng-controller="MainController">
-  <table  style="text-align: center">
-    <tr  bgcolor='#F4FAFF' > 员工表</tr>
-    <tr>
-        <td>操作</td>
-        <td>eid</td>
-        <td>ename</td>
-        <td>city</td>
-    </tr>
-    <tr ng-repeat="row in rows" bgcolor='#F4FAFF'>
-        <td><input   ng-click="eidt(row)"       value="编辑" type="button" />
-            <input   ng-click="delete(row.eid)" value="删除" type="button" /></td>
-        <td>{{row.eid}}</td>
-        <td>{{row.ename}}</td>
-        <td>{{row.city}}</td>
-    </tr>
-  </table>
+<div ng-app="app" ng-controller="MainController"  >
+    <table  style="text-align: center">
+        <tr  bgcolor='#F4FAFF' > 员工表  </tr>
+        <tr>
+            <td>操作</td>
+            <td  ng-repeat="names in col ">{{names.name}}</td>
+        </tr>
+        <tr ng-repeat="row in rows" bgcolor='#F4FAFF'>
+            <td><input   ng-click="eidt(row)"       value="编辑" type="button" />
+                <a href="/employees.html"> <input   ng-click="delete(row)" value="删除" type="button" /></a></td>
+            <td ng-repeat="name in row"  bgcolor='#F4FAFF'>{{name}} </td>
+        </tr>
+    </table>
+    <h1>编辑信息：</h1>
+    <input eid="eid" type="hidden" ng-model="data.eid" />
+    <table cellspacing="1" style="background-color: #a0c6e5">
+        <tr >
+            <td>编号：</td>
+            <td><input type="text" ng-model="data.eid" /></td>
+            <td>name：</td>
+            <td><input type="text" ng-model="data.ename" /></td>
+            <td>城市：</td>
+            <td><input type="text" ng-model="data.city" /></td>
+        </tr>
+    </table>
+    <a href="/employees.html"><button ng-click = "update()">modify</button> </a>
+    <a href="/employees.html"><button ng-click = "add()" >Add</button></a>
 
-<h1>编辑信息：</h1>
-<input eid="eid" type="hidden" ng-model="data.eid" />
-<table cellspacing="1" style="background-color: #a0c6e5">
-    <tr>
-        <td>编号：</td>
-        <td><input type="text" ng-model="data.eid" /></td>
-        <td>name：</td>
-        <td><input type="text" ng-model="data.ename" /></td>
-        <td>城市：</td>
-        <td><input type="text" ng-model="data.city" /></td>
-    </tr>
-</table>
-<button ng-click = "update()">modify</button>
-<button ng-click = "add()" >Add</button>
-    <p>{{data.eid}} {{data.ename}} {{data.city}}</p>
+    <table  style="text-align: center">
+        <tr  bgcolor='#F4FAFF' > 员工表  </tr>
+        <tr>
+            <td>operation</td>
+            <td  ng-repeat="names in col ">{{names.name}}</td>
+        </tr>
+        <tr ng-repeat="row in rows" bgcolor='#F4FAFF'>
+            <td><a href="/employees.html"><button ng-click = "modify(row)">modify</button> </a>
+                <a href="/employees.html"><button ng-click = "delete(row)" >delete</button></a>
+            </td>
+            <td ng-repeat="name in colName"  bgcolor='#F4FAFF'>
+                <input type="text"    ng-model="row[name]" /></td>
+        </tr>
+        <tr>
+            <td><a href="/employees.html"><button ng-click = "add(data)">Add</button> </a></td>
+            <td ng-repeat="name in colName" bgcolor='#F4FAFF'>
+                <input type="text" ng-model="data[name]"/>
+            </td>
+        </tr>
+    </table>
 </div>
 </body>
 </html>
